@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Create an account {% endblock %}
+{% block css_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/register_login.css' %}">
+{% endblock %}
+{% block content %}
+     <!-- Alert-->
+     <div class="container">
+        {% if form.errors %}
+        <div class="alert alert-warning w-50 alert-dismissible fade show centered-alert" role="alert">
+            <strong>Warning:</strong>
+            <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+            <button type="button" class="close alert-close" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        <!-- Alert-->
+        <form method="POST" action="">
+            <h2>A new account</h2>
+            <hr>
+            {% csrf_token %}
+            <p>{{ form.username.label }}</p>
+            {{ form.username }}
+
+            <p>{{ form.email.label }}</p>
+            {{ form.email }}
+
+            <p>{{ form.password1.label }}</p>
+            {{ form.password1 }}
+
+            <p>{{ form.password2.label }}</p>
+            {{ form.password2 }}
+
+            <input type="submit" value="Register" name="Create User">
+            <a href="{% url 'account' %}" class="">Back</a>
+        </form>
+    </div>
+    {% block js_script %}
+    <script src="{% static 'js/register.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+{% endblock %}
+{% endblock %}

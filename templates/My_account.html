@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %} Account {% endblock %}
+{% block css_style %}
+<style>
+     /* Container */
+     .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Headings */
+    h1, h2 {
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        color: #1c275c;
+        margin-top: 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    /* Form */
+    form {
+        margin-top: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #1c275c;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0d0e49;
+    }
+
+
+    .alert-danger {
+        font-family: 'Montserrat', sans-serif; /* Specify Montserrat font family */
+        color: #030420; /* Text color for labels */
+        font-size: 17px; /* Font size for labels */
+        font-weight: 500; /* Slightly bold font weight */
+    }
+
+    .alert-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px; /* Increased padding for larger button */
+        font-size: 1.5rem; /* Increased font size */
+        font-weight: bold; /* Bold font */
+        background-color: inherit; /* Match background color */
+        border: none;
+        cursor: pointer; /* Change cursor to pointer on hover */
+        transition: color 0.3s; /* Smooth transition for color change */
+        z-index: 1; /* Ensure the button stays above the floating text */
+    }
+
+    .alert-close:hover::after {
+        content: "Close";
+        position: absolute;
+        top: -30px;
+        left: -10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000000;
+        font-size: small;
+        padding: 5px; 
+        border-radius: 5px; 
+        z-index: 2; 
+    }
+
+    .alert-close:focus {
+        outline: none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %} w-50 alert-dismissible fade show centered-alert" role="alert">
+                <strong>{% if message.tags == 'error' %}Alert:{% else %}Info:{% endif %}</strong>
+                {{ message }}
+                <button type="button" class="close alert-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <h2>User Information</h2>
+    <form action="{% url 'update_myaccount' user.id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <div class="form-group">
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        <div class="form-group">
+            <label for="new_password">New Password (optional):</label>
+            <input type="password" id="new_password" name="new_password">
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm New Password (optional):</label>
+            <input type="password" id="confirm_password" name="confirm_password">
+        </div>
+        <div class="form-group">
+            <button type="submit">Update Account</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

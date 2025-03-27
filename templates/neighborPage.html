@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %} Routeur {% endblock %}
+{% block css_style %}
+<style>
+    /* Add custom CSS styles for the table */
+    .table-container {
+        margin-top: 20px;
+    }
+
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-container th, .table-container td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-container th {
+        background-color: #f2f2f2;
+    }
+
+    .table-container tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    tr {
+        background-color: #fff; /* default color */
+    }
+    .btn-search {
+        background-color: navy;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+    
+    .btn-search:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Styles for the form */
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    form div {
+        margin-right: 10px;
+    }
+    
+    form label {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    
+    form input[type="search"],
+    form select {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        width: 150px;
+        }
+    
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="text-center">Neighbors Page</h1>
+</div>
+
+<form method="GET" action="{% url 'search_neighbors' %}">
+    <div>
+        <label for="hostname">Device Hostname:</label>
+        <select name="hostname">
+            <option value="">Select</option>
+            {% for device in devices %}
+            <option value="{{ device.hostname }}">{{ device.hostname }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="interface">Interface:</label>
+        <input type="search" placeholder="Interface" aria-label="Search" name="interface">
+    </div>
+    <div>
+        <label for="neighbor">Neighbor:</label>
+        <input type="search" placeholder="Neighbor" aria-label="Search" name="neighbor">
+    </div>
+    
+    <button class="btn-search" type="submit">Search</button>
+</form>
+
+<div class="container table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Device</th>
+                <th>Interface</th>
+                <th>Interface-Address</th>
+                <th>Neighbor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for neighbor in neighbors %}
+            <tr>
+                <td>{{ neighbor.device }}</td>
+                <td>{{ neighbor.interface }}</td>
+                <td>{{ neighbor.interface_address }}</td>
+                <td>{{ neighbor.neighbor }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js_script %}
+{% endblock %}

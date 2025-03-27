@@ -1,0 +1,366 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="google" value="notranslate"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} | Notify</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block css_style %}{% endblock %}
+    <style>
+        .fa-solid {
+        font-size: 30px;
+    }
+
+    .fa-solid[data-count]:after {
+        position: relative;
+        right: 0%;
+        top: 1%;
+        content: attr(data-count);
+        font-size: 30%;
+        padding: .6em;
+        border-radius: 999px;
+        line-height: .75em;
+        color: white;
+        background: rgba(255, 0, 0, .85);
+        text-align: center;
+        min-width: 2em;
+        font-weight: bold;
+    }
+        body{
+            font-family: 'Montserrat', sans-serif;
+            background-color:#030420;
+            color:#fff;
+            }
+        .area{
+            padding-left:70px;
+            font-family: 'Montserrat', sans-serif;
+            background-color:#030420;
+            color:#fff;
+            font-weight:300;
+        }
+        .main-menu {
+            background:#F7F7F7;
+            position:fixed;
+            top:0;
+            bottom:0;
+            left:0;
+            height: 100vh;
+            width:57px;
+            overflow:hidden;
+        }
+        .main-menu:hover,
+        nav.main-menu.expanded {
+            width: 170px;
+            display: flex;
+            overflow:unset;
+            padding-left: 0px; /* Remove the fixed padding */
+        }
+
+        .menu-items {
+            list-style-type: none; 
+            flex-direction: column;
+            align-items: center;  /*Center the items horizontally */
+            padding-left: 28%;
+            transition: padding-left 0.3s; /* Add transition for smooth animation */
+        }
+
+        .main-menu:hover .menu-items {
+            padding-left: 0; /* Reset the padding when menu is hovered */
+        }
+
+        .menu-items li {
+            padding-top: 10px; /* Add padding to each list item */
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(143, 141, 141, 0.719); /* Add a bottom border */
+        }
+
+        .menu-items li:last-child {
+            border-bottom: none; /* Remove the border from the last item */
+        }
+
+        .main-menu .nav-icon {
+            position:relative;
+            display:table-cell;
+            width:50px;
+            height:36px;
+            text-align:center;
+            vertical-align:middle;
+            font-size:25px;
+            color: #333577;
+        }
+
+        .main-menu .nav-text  {
+            position:relative;
+            display:table-cell;
+            vertical-align:middle;
+            width:190px;
+            font-family: 'Montserrat', sans-serif;
+            padding-left: 18px;
+        }
+        .menu-items a {
+            text-decoration: none; /* Remove underline from links */
+            font-family: 'Montserrat', sans-serif;
+            color: #333577;
+        }
+        a:hover,a:focus {
+            color: #333577;
+            font-weight: bold;
+        }
+
+        #notify {
+        max-height: 400px;
+        overflow-y: auto; 
+    }
+
+/* Style for the mark all as read button */
+    .mark-all-read {
+        text-align: right;
+        padding: 10px;
+    }
+
+    .mark-all-read a {
+        text-decoration: none;
+        color: #333577;
+        font-size: 12px;
+        padding: 4px;
+        position: relative;
+    }
+
+    .mark-all-read a:hover{
+        content: "Mark all as read";
+        font-size: 14px;
+        display: none;
+        cursor: pointer;
+        display: block;
+        border-radius: 5px;
+    }
+
+    </style>
+</head>
+<body>
+<nav class="main-menu">
+    <ul class="menu-items">
+
+        <li>
+            <a href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                <i id="bellCount" class="fa fa-solid fa-bell fa-lg nav-icon" data-count="0" ></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-light text-wrap" id="notify" style="width: 300px !important;">
+                <div class="mark-all-read">
+                    <a href="#" id="markAllRead">
+                        <i class="fa fa-regular fa-square-check"> Mark all as read</i>
+                    </a>
+                </div>
+            </ul>
+        </li>
+    <!-- Main Menu Items -->
+        <li>                                   
+            <a href="{% url 'index' %}">
+                <i class="fa fa-home fa-lg nav-icon"></i>
+                <span class="nav-text">Home</span>
+            </a>
+        </li>  
+
+        <li>                                 
+            <a href="{% url 'my_account' user.id %}">
+                <i class="fa fa-user fa-lg nav-icon"></i>
+                <span class="nav-text"> Account</span>
+            </a>
+        </li>  
+
+        <li>                                 
+            <a href="{% url 'topology' %}">
+                <i class="fa fa-solid fa-circle-nodes nav-icon"></i>
+                <span class="nav-text">Topology</span>
+            </a>
+        </li>  
+
+        <li>                                   
+            <a href="#" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-solid fa-database nav-icon"></i>
+                <span class="nav-text">Databases</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'routeur_DB' %}">Routers</a></li>
+                <li><a class="dropdown-item" href="{% url 'neighbor_DB' %}">Neighbors</a></li>
+                <li><a class="dropdown-item" href="{% url 'lsp_DB' %}">LSPs</a></li>
+                <li><a class="dropdown-item" href="{% url 'history_DB' %}">History</a></li>
+            </ul>
+        </li>
+
+        <li>                                   
+            <a href="{% url 'cli' %}">
+                <i class="fa fa-solid fa-code fa-lg nav-icon"></i>
+                <span class="nav-text">CLI</span>
+            </a>
+        </li>   
+
+        <li>                                   
+            <a href="{% url 'command_line' %}">
+                <i class="fa fa-solid fa-hashtag fa-lg nav-icon"></i>
+                <span class="nav-text">Command Line</span>
+            </a>
+        </li>   
+    {% if user.is_superuser %} 
+        <li>                             
+            <a href="{% url 'account' %}">
+                <i class="fa fa-solid fa-users fa-lg nav-icon"></i>
+                <span class="nav-text">Accounts management</span>
+            </a>
+        </li>   
+ {% endif %}
+        <!-- Logout -->
+        <li>
+            <a href="{% url 'logout' %}">
+                <i class="fa fa-solid fa-right-from-bracket nav-icon"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </li>  
+    </ul>
+</nav>
+<div class="area">
+    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit id enim et congue. Aliquam non ullamcorper dui. Proin sed justo vitae elit suscipit dignissim. Aliquam ultrices viverra magna nec luctus. Mauris condimentum augue nec mi eleifend, ut vehicula odio convallis. Nam vel condimentum risus. Maecenas sed metus tellus. Integer ultricies auctor enim, vitae bibendum justo laoreet non. Sed sed commodo nisl, eget feugiat sem. Mauris vel sagittis leo. In eget libero vel turpis pretium elementum. Nullam tempus sapien sit amet nibh euismod, at consequat velit vehicula. Nulla at facilisis odio. Proin ac nisi dictum, volutpat enim nec, venenatis eros. Nulla facilisi. In ac velit eget felis interdum laoreet non nec enim.</p>-->
+    {% block content %}
+    {% include 'status.html' %}{% endblock %}
+</div>
+<script>
+function toggleMenu() {
+  var menu = document.querySelector('.main-menu ul.menu-items');
+  menu.classList.toggle('show');
+}
+    // setup chat socket
+    const notifySocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/notify/'
+    );
+
+    // on socket open
+    notifySocket.onopen = function (e) {
+        console.log('Socket successfully connected.');
+        fetchUnreadNotifications();
+
+    };
+     //-------------------------------------------------------------
+    // Function to handle fetching unread notifications
+    function fetchUnreadNotifications() {
+        // Send request to server to fetch unread notifications
+        notifySocket.send(JSON.stringify({
+            'type': 'fetch_unread_notifications'
+        }));
+    }
+    //-------------------------------------------------------------
+    // on socket close
+    notifySocket.onclose = function (e) {
+        console.log('Socket closed unexpectedly');
+    };
+    //------------------------------------------------------    
+    // on receiving message on group
+    notifySocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const messageType = data.type;
+        if (messageType === 'unread_notifications') 
+        {
+            const notifications = data.notifications;
+            console.log('unread notifications received:');
+            console.log(notifications);
+            // Process the received unread notifications
+            notifications.forEach(notification => {
+                const message = notification.message;
+                const notificationId = notification.id;
+                // Call the setMessage function to add the new li element
+                console.log("Setting the message:")
+                console.log(message)
+                setMessage(message, notificationId);
+            });
+        }
+        else 
+        {
+        const message = data.message;
+        const notificationId = data.id; 
+        // Call the setMessage function to add the new li element
+        setMessage(message, notificationId);
+        }
+    };
+
+    function setMessage(message, notificationId) {
+        // Create a new li element
+        var newLi = document.createElement('li');
+
+        // Create a new anchor element
+        var newAnchor = document.createElement('a');
+        newAnchor.className = 'dropdown-item text-wrap';
+        newAnchor.href = '#';
+        newAnchor.textContent = message;
+        newAnchor.setAttribute('data-notification-id', notificationId); // Add this line
+
+        // Add a click event listener to the anchor element
+        newAnchor.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            // Send notification acknowledgement to the server
+            notifySocket.send(JSON.stringify({
+                'type': 'notification_acknowledgement',
+                'notification_id': notificationId
+            }));
+            // Remove the notification from the DOM
+            newLi.remove();
+            // Decrement the notification count
+            updateNotificationCount(-1);
+        });
+
+        // Append the anchor element to the li element
+        newLi.appendChild(newAnchor);
+
+        // Get the ul element with the id "notify"
+        var ulElement = document.getElementById('notify');
+
+        // Append the new li element to the ul element
+        ulElement.appendChild(newLi);
+
+        // Increment the notification count
+        updateNotificationCount(1);
+        
+    }
+    //-----------------------------------------------
+    // Function to update the notification count
+    function updateNotificationCount(change) {
+        var countElement = document.getElementById('bellCount');
+        var count = parseInt(countElement.getAttribute('data-count'));
+        count += change;
+        console.log("Count after update");
+        console.log(count);
+        countElement.setAttribute('data-count', count);
+    }
+    //----------------------------------------------------------------
+     // Function to mark all notifications as read
+    document.getElementById('markAllRead').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    var ulElement = document.getElementById('notify');
+    var notificationElements = ulElement.getElementsByTagName('li');
+    // Iterate over each notification and acknowledge
+    Array.from(notificationElements).forEach(notificationElement => {
+        var anchor = notificationElement.querySelector('a');
+        if (anchor) {
+            // Send notification acknowledgement to the server
+            notifySocket.send(JSON.stringify({
+                'type': 'notification_acknowledgement',
+                'notification_id': anchor.dataset.notificationId
+            }));
+            // Remove the notification from the DOM
+            notificationElement.remove();
+            updateNotificationCount(-1);
+        }
+    });
+});   
+</script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<!-- Custom block for javascript -->
+{% block js_script %}{% endblock %}
+</body>
+</html>

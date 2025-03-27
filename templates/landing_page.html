@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Landing Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #030420;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .carousel-inner{
+        padding: 10px;
+        background-color: #ddd;
+        border-radius: 10px;
+        height: 500px;
+    }
+
+    .carousel-inner p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #030420;
+      margin-bottom: 20px;
+    }
+    .carousel-inner h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #030420;
+      margin-bottom: 20px;
+    }
+    .network-animation {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .notification-container {
+      position: relative;
+      height: 300px;
+    }
+    .notif_block {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .notification-badge {
+      background-color: #f00;
+      color: #fff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: background-color 0.3s ease;
+    }
+    .flash-message {
+      font-size: 16px;
+      color: #030420;
+      margin-top: 90px;
+      text-align: center;
+      padding: 5px 10px;
+      background-color: rgba(121, 88, 196, 0.5);
+      border-radius: 5px;
+    }
+  /* Table styling */
+  .table {
+    background-color: #fff; /* Change table background color */
+    color:#030420; /* Change table text color */
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px; /* Add some margin */
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #ddd; /* Add borders */
+    padding: 8px;
+    text-align: left;
+  }
+
+  .table th {
+    background-color: #f2f2f2; /* Add background color for table header */
+  }
+
+  .table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternate row background color */
+  }
+
+    .login-buttons {
+        margin-top: 30px;
+            text-align: center;
+        }
+    .btn {
+            font-size: 14px;
+            padding: 12px 24px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0 10px;
+        }
+        .btn-primary {
+            background-color: #ddd;
+            color: #030420;;
+            border: none;
+            font-size: large;
+        }
+        .btn-primary:hover {
+            background-color:#030420;
+            color: #ddd;
+
+        }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2></h2>  
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <div class="item active">
+        <h1>Topology Visualization:</h1>
+        <p>
+          Our website provides a dynamic visualization of your network topology,
+          allowing you to see the interconnected routers and the paths of MPLS Label Switched Paths (LSPs) in real-time.
+          With intuitive color-coded indicators, easily identify the status of each LSP, whether it's primary,
+          secondary, or experiencing downtime.
+        </p>
+
+        <!-- Network Animation -->
+        <svg class="network-animation"></svg>
+      </div>
+
+      <div class="item">
+        <h1>Real-Time Monitoring:</h1>
+        <div class="notification-container">
+          <p>
+            Experience real-time monitoring of your network's health with our integrated monitoring system.
+            By leveraging syslog data from your routers, we detect changes in LSP states instantly.
+            Receive immediate notifications when an LSP goes down, ensuring swift response to network issues.
+          </p>
+          <div class="notif_block">
+            <!-- Notification Counter -->
+            <div class="notification-badge" id="notificationCounter">0</div>
+            <!-- Flash Message -->
+            <div class="flash-message" id="flashMessage"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <h1>Historical Tracking:</h1>
+        <p>
+          Keep track of network changes over time with our historical tracking feature.
+          We maintain a detailed history of LSP status changes,
+          allowing you to review past events, troubleshoot issues, and identify trends in network performance.
+        </p>
+
+        <!-- Historical Animation with Table -->
+<div class="historical-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+        </tr>
+      </thead>
+      <tbody id="historicalData">
+        <!-- Data will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+  
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+  <div class="login-buttons">
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
+</div>
+<!-- D3.js & Bootstrap JS -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Network Animation with D3.js
+  const svg = d3.select(".network-animation")
+    .attr("width", 400)
+    .attr("height", 300);
+
+  // Define nodes and links
+  const nodes = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6}];
+  const links = [{source: 0, target: 1 }, {source: 1, target: 2}, {source: 2, target: 3}, 
+                 {source: 3, target: 4},  {source: 4, target: 5}, {source: 5, target: 0}];
+
+  // Create simulation
+  const simulation = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("link", d3.forceLink(links).distance(80).strength(0.5))
+    .force("center", d3.forceCenter(200, 150))
+    .on("tick", ticked);
+
+  // Draw links
+  const link = svg.selectAll(".link")
+    .data(links)
+    .enter().append("line")
+    .attr("class", "link")
+    .style("stroke", (d, i) => i < 3 ? "#00ff00" : "black");
+
+  // Draw nodes
+  const node = svg.selectAll(".node")
+    .data(nodes)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 15)
+    .style("fill", "#1c275c");
+
+  // Tick function
+  function ticked() {
+    link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+  }
+
+  // LSP state messages
+  const lspMessages = [
+    'The primary LSP is DOWN',
+    'The secondary LSP is UP',
+    'The tertiary LSP is experiencing issues',
+    'All LSPs are operational',
+    'Primary LSP is UP, secondary is DOWN'
+  ];
+
+  let notificationCount = 0;
+
+  setInterval(() => {
+    // Increment notification count if it's less than 20
+    if (notificationCount < 20) {
+      notificationCount++;
+      
+      // Display a random LSP state message
+      const message = lspMessages[Math.floor(Math.random() * lspMessages.length)];
+      document.getElementById('flashMessage').textContent = message;
+      
+      setTimeout(() => {
+        document.getElementById('flashMessage').textContent = '';
+      }, 2000); // Hide flash message after 5 seconds
+
+      // Update notification counter
+      document.getElementById('notificationCounter').textContent = notificationCount;
+    } else {
+      notificationCount = 0;
+    }
+  }, 5000); // Increment every 2 seconds (for demonstration purposes)
+
+
+ // Historical Data
+const historicalData = [
+  { date: "2024-01-01", event: "Network Upgrade" },
+  { date: "2024-02-15", event: "Server Maintenance" },
+  { date: "2024-03-10", event: "Software Patch" },
+  { date: "2024-04-22", event: "Router Configuration Change" },
+  { date: "2024-05-18", event: "Security Audit" }
+];
+
+// Function to populate historical table
+function populateHistoricalTable(data) {
+  const tableBody = document.getElementById("historicalData");
+  tableBody.innerHTML = ""; // Clear existing data
+  
+  data.forEach(item => {
+    const row = document.createElement("tr");
+    const dateCell = document.createElement("td");
+    const eventCell = document.createElement("td");
+    
+    dateCell.textContent = item.date;
+    eventCell.textContent = item.event;
+    
+    row.appendChild(dateCell);
+    row.appendChild(eventCell);
+    
+    tableBody.appendChild(row);
+  });
+}
+
+// Function to update the historical table
+let currentIndex = 0;
+const intervalId = setInterval(() => {
+  if (currentIndex < historicalData.length) {
+    const newData = historicalData[currentIndex];
+    const tableBody = document.getElementById("historicalData");
+    const row = document.createElement("tr");
+    const dateCell = document.createElement("td");
+    const eventCell = document.createElement("td");
+
+    dateCell.textContent = newData.date;
+    eventCell.textContent = newData.event;
+
+    row.appendChild(dateCell);
+    row.appendChild(eventCell);
+
+    tableBody.appendChild(row);
+
+    currentIndex++;
+  } else {
+    clearInterval(intervalId); // Stop the interval
+    currentIndex = 0; // Restart from the beginning
+    populateHistoricalTable(historicalData); // Repopulate the table
+  }
+}, 2000); // Update every 5 seconds
+
+
+</script>
+</body>
+</html>

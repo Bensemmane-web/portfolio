@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Delete User {% endblock %}
+{% block css_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/delete.css' %}">
+{% endblock %}
+{% block content %}
+<form action="{% url 'delete_user' user.id %}" method="POST">
+    {% csrf_token %}
+    <h2>Delete User</h2>
+    <p>Are you sure you want to delete the user '{{ user.username }}'? This action cannot be undone.</p>
+    <input type="submit" value="Delete" class="button color-delete">
+    <a href="{% url 'account' %}" class="button btn-secondary">Cancel</a>
+</form>
+{% endblock %}
